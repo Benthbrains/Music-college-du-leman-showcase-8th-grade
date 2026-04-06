@@ -2,23 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Interactive Buzzer Presentation</title>
+<title>Technology showcase Music by: Benjamin and Kfir</title>
 
 <style>
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: black;
-    color: white;
+    background: #000;
+    color: #fff;
     overflow-x: hidden;
 }
 
-/* Scroll snapping */
-html {
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
-}
-
+/* Sections */
 section {
     height: 100vh;
     display: flex;
@@ -27,251 +22,344 @@ section {
     align-items: center;
     text-align: center;
     padding: 40px;
-    scroll-snap-align: start;
     position: relative;
-    z-index: 2;
-}
-
-/* Background canvas */
-#bgCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 0;
 }
 
 /* Text */
 h1 {
     font-size: 4rem;
-    text-shadow: 0 0 20px #00d4ff;
+    margin: 0;
+    transition: 0.3s;
 }
 
-h2 { color: #aaa; }
+h1:hover {
+    color: #00d4ff;
+    transform: scale(1.05);
+}
 
+h2 {
+    font-size: 2rem;
+    color: #aaa;
+}
+
+p {
+    max-width: 700px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Highlight */
 .highlight {
     color: #00d4ff;
+    text-shadow: 0 0 10px #00d4ff;
 }
 
-/* Slide animation */
-.animate {
-    transform: scale(0.9);
-    opacity: 0.4;
-    transition: 0.6s;
+/* Fade animation */
+.fade {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeIn 1.5s forwards;
 }
 
-.active {
-    transform: scale(1);
-    opacity: 1;
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Background styles */
-.dark { background: black; }
-.blue { background: linear-gradient(135deg,#001f3f,#0074D9); }
-.purple { background: linear-gradient(135deg,#2c003e,#8e44ad); }
+.dark { background: #000; }
+.blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
+.purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
 
-/* Video */
-video {
-    width: 70%;
+/* Image styling */
+.image {
+    width: 60%;
+    max-width: 700px;
+    margin-top: 20px;
     border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,212,255,0.5);
+    box-shadow: 0 0 30px rgba(0,212,255,0.3);
+    transition: 0.4s;
 }
 
-/* Piano */
+.image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 50px rgba(0,212,255,0.8);
+}
+
+/* Video styling */
+video {
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0,212,255,0.5);
+    margin-top: 20px;
+}
+
+/* Floating music notes effect */
+.note {
+    position: absolute;
+    font-size: 2rem;
+    animation: float 6s infinite linear;
+    opacity: 0.2;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
+
+/* 🎹 Piano UI */
 .piano {
     display: flex;
     margin-top: 30px;
 }
 
 .key {
-    width: 50px;
-    height: 180px;
+    width: 40px;
+    height: 160px;
     background: white;
     border: 1px solid black;
-    cursor: pointer;
+    transition: 0.1s;
 }
 
-.key:active { background: #00d4ff; }
+.key.active {
+    background: #00d4ff;
+    box-shadow: 0 0 20px #00d4ff;
+}
 
 .black {
-    width: 30px;
+    width: 25px;
     height: 100px;
     background: black;
-    margin-left: -15px;
-    margin-right: -15px;
-    z-index: 3;
+    margin-left: -12px;
+    margin-right: -12px;
+    z-index: 2;
     position: relative;
+}
+
+/* 🌌 Canvas */
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Floating Notes -->
+<div class="note" style="left:10%">🎵</div>
+<div class="note" style="left:30%; animation-delay:2s;">🎶</div>
+<div class="note" style="left:70%; animation-delay:4s;">🎵</div>
+
 <canvas id="bgCanvas"></canvas>
 
 <!-- Slide 1 -->
-<section class="dark">
-<h1>🎮 Interactive Buzzer Simulation</h1>
-<h2>By Benjamin & Kfir</h2>
+<section class="dark fade">
+    <h1>🎮 Interactive Buzzer Simulation</h1>
+    <h2>By Benjamin & Kfir</h2>
 </section>
 
 <!-- Slide 2 -->
-<section class="blue">
-<h1>It started with a question.</h1>
-<p>Can we turn buzzers into something <span class="highlight">musical?</span></p>
+<section class="blue fade">
+    <h1>It started with a question.</h1>
+    <p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p>
 </section>
 
-<!-- Slide 3 -->
-<section class="dark">
-<h1>So we tried.</h1>
-<p>We connected buzzers to Arduino.</p>
+<!-- Slide 3 (image added) -->
+<section class="dark fade">
+    <h1>So we tried.</h1>
+    <p>We took 4 buzzers. Connected them to an Arduino.</p>
+    <img class="image" src="arduino.jpg" alt="Arduino setup">
 </section>
 
 <!-- Slide 4 -->
-<section class="purple">
-<h1>Then… it worked.</h1>
-<h2>“Clocks” – Coldplay</h2>
+<section class="purple fade">
+    <h1>Then… it worked.</h1>
+    <p>Our first full song:</p>
+    <h2>“Clocks” – Coldplay</h2>
 </section>
 
-<!-- VIDEO -->
-<section class="dark">
-<h1>Watch the Process</h1>
-
-<video controls>
-<source src="clocks.mp4" type="video/mp4">
-</video>
-
+<!-- 🎥 VIDEO (Clocks MP4) -->
+<section class="dark fade">
+    <h1>Watch the Process</h1>
+    <video width="70%" height="350" controls>
+        <source src="clocks.mp4" type="video/mp4">
+    </video>
 </section>
 
-<!-- Piano Slide -->
-<section class="blue">
-<h1>Try the Piano 🎹</h1>
+<!-- Slide 5 -->
+<section class="blue fade">
+    <h1>But how does it work?</h1>
+</section>
 
-<div class="piano">
-<div class="key" onclick="playNote(261.63)"></div>
-<div class="key black" onclick="playNote(277.18)"></div>
-<div class="key" onclick="playNote(293.66)"></div>
-<div class="key black" onclick="playNote(311.13)"></div>
-<div class="key" onclick="playNote(329.63)"></div>
-<div class="key" onclick="playNote(349.23)"></div>
-<div class="key black" onclick="playNote(369.99)"></div>
-<div class="key" onclick="playNote(392.00)"></div>
+<!-- Slide 6 -->
+<section class="dark fade">
+    <h1>Step 1</h1>
+    <p>We created <span class="highlight">92 variables</span> for musical notes.</p>
+    <img class="image" src="notes.jpg" alt="Music notes">
+</section>
+
+<!-- Slide 7 -->
+<section class="dark fade">
+    <h1>The Logic</h1>
+    <p>Each note = Letter + Number + Sharp/Normal</p>
+</section>
+
+<!-- Slide 8 -->
+<section class="purple fade">
+    <h1>Step 2</h1>
+    <p>Arduino sends signals ▶ ⏸ ⏹</p>
+    <img class="image" src="soundwave.jpg" alt="Sound wave">
+</section>
+
+<!-- Slide 9 -->
+<section class="dark fade">
+    <h1>Step 3</h1>
+    <p>Buzzers combine to recreate real music 🎶</p>
+</section>
+
+<!-- Slide 10 -->
+<section class="blue fade">
+    <h1>What’s next?</h1>
+</section>
+
+<!-- Slide 11 -->
+<section class="purple fade">
+    <h1>New Song</h1>
+    <h2>“No Longer You”</h2>
+</section>
+
+<!-- 🎹 Piano Slide -->
+<section class="dark fade">
+<h1>Play It Yourself 🎹</h1>
+
+<div class="piano" id="piano">
+    <div class="key" data-note="261.63"></div>
+    <div class="key black" data-note="277.18"></div>
+    <div class="key" data-note="293.66"></div>
+    <div class="key black" data-note="311.13"></div>
+    <div class="key" data-note="329.63"></div>
+    <div class="key" data-note="349.23"></div>
+    <div class="key black" data-note="369.99"></div>
+    <div class="key" data-note="392.00"></div>
+    <div class="key black" data-note="415.30"></div>
+    <div class="key" data-note="440.00"></div>
 </div>
 
 </section>
 
-<!-- Final -->
-<section class="purple">
-<h1>Thank You</h1>
+<!-- Final Slide -->
+<section class="blue fade">
+    <h1>Thank You.</h1>
+    <p>Any questions?</p>
 </section>
 
 <script>
-// 🎹 AUDIO ENGINE
+// 🎧 Audio Setup
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioCtx.createAnalyser();
 
-function playNote(freq, duration=0.4){
-    const osc = audioCtx.createOscillator();
+// 🎵 Play Note with layered wave + highlight
+function playNote(freq, duration = 0.5) {
+    const osc1 = audioCtx.createOscillator();
+    const osc2 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
-    osc.frequency.value = freq;
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    osc1.type = "sawtooth";
+    osc2.type = "triangle";
 
-    osc.start();
+    osc1.frequency.value = freq;
+    osc2.frequency.value = freq * 1.01;
 
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+duration);
+    osc1.connect(gain);
+    osc2.connect(gain);
 
-    osc.stop(audioCtx.currentTime+duration);
-}
+    gain.connect(analyser);
+    analyser.connect(audioCtx.destination);
 
-// 🧠 CLOCKS AUTO PLAY
-function playClocks(){
-    const melody = [
-        329.63,392.00,440.00,
-        329.63,392.00,440.00,
-        293.66,349.23,392.00
-    ];
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
 
-    melody.forEach((n,i)=>{
-        setTimeout(()=>playNote(n), i*300);
-    });
-}
+    osc1.start();
+    osc2.start();
 
-// 🎬 SLIDE ANIMATION + TRIGGER
-const sections = document.querySelectorAll("section");
-let current = 0;
+    osc1.stop(audioCtx.currentTime + duration);
+    osc2.stop(audioCtx.currentTime + duration);
 
-function showSlide(i){
-    if(i<0 || i>=sections.length) return;
-    current = i;
-    sections[i].scrollIntoView({behavior:"smooth"});
-}
-
-// keyboard
-document.addEventListener("keydown", e=>{
-    if(e.key==="ArrowDown"||e.key==="ArrowRight") showSlide(current+1);
-    if(e.key==="ArrowUp"||e.key==="ArrowLeft") showSlide(current-1);
-});
-
-// observer
-const observer = new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
-        if(entry.isIntersecting){
-            entry.target.classList.add("active");
-
-            if(entry.target.innerText.includes("Clocks")){
-                playClocks();
-            }
+    // 🌈 highlight key
+    document.querySelectorAll(".key").forEach(k => {
+        if (Math.abs(k.dataset.note - freq) < 1) {
+            k.classList.add("active");
+            setTimeout(() => k.classList.remove("active"), 200);
         }
     });
-},{threshold:0.6});
+}
 
-sections.forEach(sec=>{
-    sec.classList.add("animate");
-    observer.observe(sec);
+// 🎼 Clocks Melody
+function playClocks() {
+    const melody = [
+        329.63,392,440,392,
+        329.63,392,440,392,
+        293.66,349.23,392,349.23,
+        261.63,329.63,392
+    ];
+
+    const tempo = 180;
+    const interval = 60000 / tempo;
+
+    melody.forEach((note, i) => {
+        setTimeout(() => playNote(note), i * interval);
+    });
+}
+
+// Click piano
+document.querySelectorAll(".key").forEach(key => {
+    key.addEventListener("click", () => {
+        playNote(parseFloat(key.dataset.note));
+    });
 });
 
-// 🌌 PARTICLES
+// 🌌 Audio-reactive particles
 const canvas = document.getElementById("bgCanvas");
 const ctx = canvas.getContext("2d");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let particles=[];
+let particles = Array.from({length: 80}, () => ({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    size: Math.random()*2
+}));
 
-for(let i=0;i<80;i++){
-    particles.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
-        z:Math.random()*1000
-    });
-}
+function animate() {
+    requestAnimationFrame(animate);
 
-function animate(){
-    ctx.fillStyle="black";
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    ctx.fillStyle="#00d4ff";
+    let data = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(data);
 
-    particles.forEach(p=>{
-        p.z-=2;
-        if(p.z<=0) p.z=1000;
+    let avg = data.reduce((a,b)=>a+b,0)/data.length;
 
-        let k=200/p.z;
-        let x=(p.x-canvas.width/2)*k+canvas.width/2;
-        let y=(p.y-canvas.height/2)*k+canvas.height/2;
+    particles.forEach(p => {
+        p.y -= (avg/50);
+        if (p.y < 0) p.y = canvas.height;
 
-        ctx.fillRect(x,y,2,2);
+        ctx.fillStyle = "#00d4ff";
+        ctx.fillRect(p.x, p.y, p.size + avg/50, p.size + avg/50);
     });
-
-    requestAnimationFrame(animate);
 }
+
 animate();
 
-window.addEventListener("resize", ()=>{
-    canvas.width=window.innerWidth;
-    canvas.height=window.innerHeight;
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 });
 </script>
 
