@@ -2,210 +2,195 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Arduino Music Project</title>
-
+<title>Interactive Buzzer Simulation</title>
 <style>
-:root {
-    --bg: #0f0f0f;
-    --text: white;
-    --accent: #00d4ff;
-    --card: rgba(255,255,255,0.05);
-}
-
-body.light {
-    --bg: #f5f5f5;
-    --text: #111;
-    --accent: #007aff;
-    --card: rgba(0,0,0,0.05);
-}
-
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
 }
 
-/* SLIDES */
-.slide {
+section {
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    scroll-snap-align: start;
-    padding: 40px;
     text-align: center;
-    animation: fadeIn 1.2s ease;
+    padding: 40px;
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 4rem;
+    margin: 0;
 }
 
 h2 {
-    font-size: 2.2em;
-    color: var(--accent);
+    font-size: 2rem;
+    color: #aaa;
 }
 
 p {
     max-width: 700px;
-    opacity: 0.85;
+    font-size: 1.2rem;
+    line-height: 1.6;
 }
 
-/* CARD */
-.card {
-    background: var(--card);
-    padding: 25px;
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    margin-top: 20px;
+.highlight {
+    color: #00d4ff;
 }
 
-/* VIDEO PLACEHOLDER */
-.video {
-    width: 80%;
-    height: 300px;
-    border: 2px dashed var(--accent);
-    border-radius: 20px;
+.video-placeholder {
+    width: 70%;
+    height: 350px;
+    border: 2px dashed #555;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     margin-top: 20px;
+    color: #777;
 }
 
-/* BUTTON */
-.button {
-    margin-top: 20px;
-    padding: 12px 25px;
-    border-radius: 30px;
-    border: none;
-    background: var(--accent);
-    color: white;
-    font-size: 1em;
-    cursor: pointer;
-    box-shadow: 0 0 15px var(--accent);
-    transition: 0.3s;
+.fade {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeIn 1.5s forwards;
 }
 
-.button:hover {
-    box-shadow: 0 0 30px var(--accent);
-    transform: scale(1.05);
-}
-
-/* TOGGLE */
-.toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-}
-
-/* ANIMATION */
 @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(30px);}
-    to {opacity: 1; transform: translateY(0);}
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
+/* Slide colors */
+.dark { background: #000; }
+.blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
+.purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
 </style>
 </head>
 
 <body>
 
-<!-- DARK/LIGHT TOGGLE -->
-<div class="toggle">
-    <a href="#" onclick="document.body.classList.toggle('light')" class="button">
-        Toggle Mode
-    </a>
-</div>
-
-<!-- SLIDE 1 -->
-<section class="slide">
-    <h1>Arduino Music Project</h1>
-    <p>Using 4 Buzzers to Create Music with Code</p>
-    <a href="#slide2" class="button">Start</a>
+<!-- Slide 1 -->
+<section class="dark fade">
+    <h1>🎮 Interactive Buzzer Simulation</h1>
+    <h2>By Benjamin & Kfir</h2>
 </section>
 
-<!-- SLIDE 2 -->
-<section class="slide" id="slide2">
-    <h2>Overview</h2>
-    <div class="card">
-        <p>
-            This project uses an Arduino to control 4 buzzers,
-            allowing it to play, pause, and stop musical notes.
-        </p>
+<!-- Slide 2 -->
+<section class="blue fade">
+    <h1>It started with a question.</h1>
+    <p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p>
+</section>
+
+<!-- Slide 3 -->
+<section class="dark fade">
+    <h1>So we tried.</h1>
+    <p>We took 4 buzzers.  
+    We connected them to an Arduino.  
+    And we started experimenting.</p>
+</section>
+
+<!-- Slide 4 -->
+<section class="purple fade">
+    <h1>Then… it worked.</h1>
+    <p>Our first full song:</p>
+    <h2>“Clocks” – Coldplay</h2>
+</section>
+
+<!-- Video Placeholder -->
+<section class="dark fade">
+    <h1>Watch the Process</h1>
+    <div class="video-placeholder">
+        <!-- INSERT VIDEO HERE -->
+        Your video goes here
     </div>
 </section>
 
-<!-- SLIDE 3 -->
-<section class="slide">
-    <h2>92 Variables System</h2>
-    <div class="card">
-        <p>
-            The code defines 92 variables that map musical notes
-            to specific frequencies.
-        </p>
+<!-- Slide 5 -->
+<section class="blue fade">
+    <h1>But how does it work?</h1>
+</section>
+
+<!-- Slide 6 -->
+<section class="dark fade">
+    <h1>Step 1</h1>
+    <p>
+    We created <span class="highlight">92 variables</span>.  
+    Each one represents a musical note.
+    </p>
+</section>
+
+<!-- Slide 7 -->
+<section class="dark fade">
+    <h1>The Logic</h1>
+    <p>
+    Every note has a name:
+    <br><br>
+    Letter + Number (like a piano)  
+    + N (normal) or S (sharp)
+    </p>
+</section>
+
+<!-- Slide 8 -->
+<section class="purple fade">
+    <h1>Step 2</h1>
+    <p>
+    The Arduino sends signals to the buzzers:
+    <br><br>
+    ▶ Play a note  
+    ⏸ Pause  
+    ⏹ Stop
+    </p>
+</section>
+
+<!-- Slide 9 -->
+<section class="dark fade">
+    <h1>Step 3</h1>
+    <p>
+    The buzzers work together  
+    to recreate real music.
+    </p>
+</section>
+
+<!-- Video Placeholder -->
+<section class="dark fade">
+    <h1>The Code in Action</h1>
+    <div class="video-placeholder">
+        <!-- INSERT CODING VIDEO HERE -->
+        Coding video goes here
     </div>
 </section>
 
-<!-- SLIDE 4 -->
-<section class="slide">
-    <h2>Note Naming</h2>
-    <div class="card">
-        <p>
-            Each note follows:
-            <br><br>
-            Letter + Number (C4, A5)
-            <br>
-            N = Normal
-            <br>
-            S = Sharp
-        </p>
-    </div>
+<!-- Slide 10 -->
+<section class="blue fade">
+    <h1>What’s next?</h1>
 </section>
 
-<!-- SLIDE 5 -->
-<section class="slide">
-    <h2>Hardware Control</h2>
-    <div class="card">
-        <p>
-            Arduino sends signals to buzzers to:
-            play notes, pause, and stop sequences.
-        </p>
-    </div>
+<!-- Slide 11 -->
+<section class="purple fade">
+    <h1>New Song</h1>
+    <h2>“No Longer You”</h2>
+    <p>By Jorge Rivera-Herrans</p>
 </section>
 
-<!-- SLIDE 6 -->
-<section class="slide">
-    <h2>Code Video</h2>
-    <div class="video">
-        🎥 INSERT CODING VIDEO HERE
-    </div>
-
-    <!-- Replace with:
-    <video controls width="80%">
-        <source src="code.mp4" type="video/mp4">
-    </video>
-    -->
+<!-- Slide 12 -->
+<section class="dark fade">
+    <h1>This is just the beginning.</h1>
+    <p>
+    From simple buzzers…  
+    to something much bigger.
+    </p>
 </section>
 
-<!-- SLIDE 7 -->
-<section class="slide">
-    <h2>Final Result</h2>
-    <div class="video">
-        🎥 INSERT FINAL RESULT VIDEO HERE
-    </div>
-</section>
-
-<!-- SLIDE 8 -->
-<section class="slide">
-    <h2>Conclusion</h2>
-    <div class="card">
-        <p>
-            This project shows how programming and hardware
-            combine to create a musical system.
-        </p>
-    </div>
+<!-- Final Slide -->
+<section class="blue fade">
+    <h1>Thank You.</h1>
+    <p>Any questions?</p>
 </section>
 
 </body>
