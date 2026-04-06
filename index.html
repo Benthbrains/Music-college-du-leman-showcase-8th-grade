@@ -1,1 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Arduino Music Project</title>
 
+<style>
+:root {
+    --bg: #0f0f0f;
+    --text: white;
+    --accent: #00d4ff;
+    --card: rgba(255,255,255,0.05);
+}
+
+body.light {
+    --bg: #f5f5f5;
+    --text: #111;
+    --accent: #007aff;
+    --card: rgba(0,0,0,0.05);
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+}
+
+/* SLIDES */
+.slide {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+    padding: 40px;
+    text-align: center;
+    animation: fadeIn 1.2s ease;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2.2em;
+    color: var(--accent);
+}
+
+p {
+    max-width: 700px;
+    opacity: 0.85;
+}
+
+/* CARD */
+.card {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    margin-top: 20px;
+}
+
+/* VIDEO PLACEHOLDER */
+.video {
+    width: 80%;
+    height: 300px;
+    border: 2px dashed var(--accent);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* BUTTON */
+.button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+    box-shadow: 0 0 15px var(--accent);
+    transition: 0.3s;
+}
+
+.button:hover {
+    box-shadow: 0 0 30px var(--accent);
+    transform: scale(1.05);
+}
+
+/* TOGGLE */
+.toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- DARK/LIGHT TOGGLE -->
+<div class="toggle">
+    <a href="#" onclick="document.body.classList.toggle('light')" class="button">
+        Toggle Mode
+    </a>
+</div>
+
+<!-- SLIDE 1 -->
+<section class="slide">
+    <h1>Arduino Music Project</h1>
+    <p>Using 4 Buzzers to Create Music with Code</p>
+    <a href="#slide2" class="button">Start</a>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide" id="slide2">
+    <h2>Overview</h2>
+    <div class="card">
+        <p>
+            This project uses an Arduino to control 4 buzzers,
+            allowing it to play, pause, and stop musical notes.
+        </p>
+    </div>
+</section>
+
+<!-- SLIDE 3 -->
+<section class="slide">
+    <h2>92 Variables System</h2>
+    <div class="card">
+        <p>
+            The code defines 92 variables that map musical notes
+            to specific frequencies.
+        </p>
+    </div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide">
+    <h2>Note Naming</h2>
+    <div class="card">
+        <p>
+            Each note follows:
+            <br><br>
+            Letter + Number (C4, A5)
+            <br>
+            N = Normal
+            <br>
+            S = Sharp
+        </p>
+    </div>
+</section>
+
+<!-- SLIDE 5 -->
+<section class="slide">
+    <h2>Hardware Control</h2>
+    <div class="card">
+        <p>
+            Arduino sends signals to buzzers to:
+            play notes, pause, and stop sequences.
+        </p>
+    </div>
+</section>
+
+<!-- SLIDE 6 -->
+<section class="slide">
+    <h2>Code Video</h2>
+    <div class="video">
+        🎥 INSERT CODING VIDEO HERE
+    </div>
+
+    <!-- Replace with:
+    <video controls width="80%">
+        <source src="code.mp4" type="video/mp4">
+    </video>
+    -->
+</section>
+
+<!-- SLIDE 7 -->
+<section class="slide">
+    <h2>Final Result</h2>
+    <div class="video">
+        🎥 INSERT FINAL RESULT VIDEO HERE
+    </div>
+</section>
+
+<!-- SLIDE 8 -->
+<section class="slide">
+    <h2>Conclusion</h2>
+    <div class="card">
+        <p>
+            This project shows how programming and hardware
+            combine to create a musical system.
+        </p>
+    </div>
+</section>
+
+</body>
+</html>
