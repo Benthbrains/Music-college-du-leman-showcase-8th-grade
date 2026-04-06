@@ -2,14 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Interactive Buzzer Simulation</title>
+<title>Interactive Buzzer Presentation</title>
+
 <style>
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #000;
-    color: #fff;
+    background: black;
+    color: white;
     overflow-x: hidden;
+}
+
+/* Scroll snapping */
+html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 }
 
 section {
@@ -20,178 +27,253 @@ section {
     align-items: center;
     text-align: center;
     padding: 40px;
+    scroll-snap-align: start;
+    position: relative;
+    z-index: 2;
 }
 
+/* Background canvas */
+#bgCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+/* Text */
 h1 {
     font-size: 4rem;
-    margin: 0;
+    text-shadow: 0 0 20px #00d4ff;
 }
 
-h2 {
-    font-size: 2rem;
-    color: #aaa;
-}
-
-p {
-    max-width: 700px;
-    font-size: 1.2rem;
-    line-height: 1.6;
-}
+h2 { color: #aaa; }
 
 .highlight {
     color: #00d4ff;
 }
 
-.video-placeholder {
+/* Slide animation */
+.animate {
+    transform: scale(0.9);
+    opacity: 0.4;
+    transition: 0.6s;
+}
+
+.active {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Background styles */
+.dark { background: black; }
+.blue { background: linear-gradient(135deg,#001f3f,#0074D9); }
+.purple { background: linear-gradient(135deg,#2c003e,#8e44ad); }
+
+/* Video */
+video {
     width: 70%;
-    height: 350px;
-    border: 2px dashed #555;
+    border-radius: 12px;
+    box-shadow: 0 0 40px rgba(0,212,255,0.5);
+}
+
+/* Piano */
+.piano {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    color: #777;
+    margin-top: 30px;
 }
 
-.fade {
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeIn 1.5s forwards;
+.key {
+    width: 50px;
+    height: 180px;
+    background: white;
+    border: 1px solid black;
+    cursor: pointer;
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+.key:active { background: #00d4ff; }
 
-/* Slide colors */
-.dark { background: #000; }
-.blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
-.purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
+.black {
+    width: 30px;
+    height: 100px;
+    background: black;
+    margin-left: -15px;
+    margin-right: -15px;
+    z-index: 3;
+    position: relative;
+}
 </style>
 </head>
 
 <body>
 
+<canvas id="bgCanvas"></canvas>
+
 <!-- Slide 1 -->
-<section class="dark fade">
-    <h1>🎮 Interactive Buzzer Simulation</h1>
-    <h2>By Benjamin & Kfir</h2>
+<section class="dark">
+<h1>🎮 Interactive Buzzer Simulation</h1>
+<h2>By Benjamin & Kfir</h2>
 </section>
 
 <!-- Slide 2 -->
-<section class="blue fade">
-    <h1>It started with a question.</h1>
-    <p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p>
+<section class="blue">
+<h1>It started with a question.</h1>
+<p>Can we turn buzzers into something <span class="highlight">musical?</span></p>
 </section>
 
 <!-- Slide 3 -->
-<section class="dark fade">
-    <h1>So we tried.</h1>
-    <p>We took 4 buzzers.  
-    We connected them to an Arduino.  
-    And we started experimenting.</p>
+<section class="dark">
+<h1>So we tried.</h1>
+<p>We connected buzzers to Arduino.</p>
 </section>
 
 <!-- Slide 4 -->
-<section class="purple fade">
-    <h1>Then… it worked.</h1>
-    <p>Our first full song:</p>
-    <h2>“Clocks” – Coldplay</h2>
+<section class="purple">
+<h1>Then… it worked.</h1>
+<h2>“Clocks” – Coldplay</h2>
 </section>
 
-<!-- Video Placeholder -->
-<section class="dark fade">
-    <h1>Watch the Process</h1>
-    <div class="video-placeholder">
-        <!-- INSERT VIDEO HERE -->
-        Your video goes here
-    </div>
+<!-- VIDEO -->
+<section class="dark">
+<h1>Watch the Process</h1>
+
+<video controls>
+<source src="clocks.mp4" type="video/mp4">
+</video>
+
 </section>
 
-<!-- Slide 5 -->
-<section class="blue fade">
-    <h1>But how does it work?</h1>
+<!-- Piano Slide -->
+<section class="blue">
+<h1>Try the Piano 🎹</h1>
+
+<div class="piano">
+<div class="key" onclick="playNote(261.63)"></div>
+<div class="key black" onclick="playNote(277.18)"></div>
+<div class="key" onclick="playNote(293.66)"></div>
+<div class="key black" onclick="playNote(311.13)"></div>
+<div class="key" onclick="playNote(329.63)"></div>
+<div class="key" onclick="playNote(349.23)"></div>
+<div class="key black" onclick="playNote(369.99)"></div>
+<div class="key" onclick="playNote(392.00)"></div>
+</div>
+
 </section>
 
-<!-- Slide 6 -->
-<section class="dark fade">
-    <h1>Step 1</h1>
-    <p>
-    We created <span class="highlight">92 variables</span>.  
-    Each one represents a musical note.
-    </p>
+<!-- Final -->
+<section class="purple">
+<h1>Thank You</h1>
 </section>
 
-<!-- Slide 7 -->
-<section class="dark fade">
-    <h1>The Logic</h1>
-    <p>
-    Every note has a name:
-    <br><br>
-    Letter + Number (like a piano)  
-    + N (normal) or S (sharp)
-    </p>
-</section>
+<script>
+// 🎹 AUDIO ENGINE
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-<!-- Slide 8 -->
-<section class="purple fade">
-    <h1>Step 2</h1>
-    <p>
-    The Arduino sends signals to the buzzers:
-    <br><br>
-    ▶ Play a note  
-    ⏸ Pause  
-    ⏹ Stop
-    </p>
-</section>
+function playNote(freq, duration=0.4){
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
-<!-- Slide 9 -->
-<section class="dark fade">
-    <h1>Step 3</h1>
-    <p>
-    The buzzers work together  
-    to recreate real music.
-    </p>
-</section>
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
 
-<!-- Video Placeholder -->
-<section class="dark fade">
-    <h1>The Code in Action</h1>
-    <div class="video-placeholder">
-        <!-- INSERT CODING VIDEO HERE -->
-        Coding video goes here
-    </div>
-</section>
+    osc.start();
 
-<!-- Slide 10 -->
-<section class="blue fade">
-    <h1>What’s next?</h1>
-</section>
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+duration);
 
-<!-- Slide 11 -->
-<section class="purple fade">
-    <h1>New Song</h1>
-    <h2>“No Longer You”</h2>
-    <p>By Jorge Rivera-Herrans</p>
-</section>
+    osc.stop(audioCtx.currentTime+duration);
+}
 
-<!-- Slide 12 -->
-<section class="dark fade">
-    <h1>This is just the beginning.</h1>
-    <p>
-    From simple buzzers…  
-    to something much bigger.
-    </p>
-</section>
+// 🧠 CLOCKS AUTO PLAY
+function playClocks(){
+    const melody = [
+        329.63,392.00,440.00,
+        329.63,392.00,440.00,
+        293.66,349.23,392.00
+    ];
 
-<!-- Final Slide -->
-<section class="blue fade">
-    <h1>Thank You.</h1>
-    <p>Any questions?</p>
-</section>
+    melody.forEach((n,i)=>{
+        setTimeout(()=>playNote(n), i*300);
+    });
+}
+
+// 🎬 SLIDE ANIMATION + TRIGGER
+const sections = document.querySelectorAll("section");
+let current = 0;
+
+function showSlide(i){
+    if(i<0 || i>=sections.length) return;
+    current = i;
+    sections[i].scrollIntoView({behavior:"smooth"});
+}
+
+// keyboard
+document.addEventListener("keydown", e=>{
+    if(e.key==="ArrowDown"||e.key==="ArrowRight") showSlide(current+1);
+    if(e.key==="ArrowUp"||e.key==="ArrowLeft") showSlide(current-1);
+});
+
+// observer
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.classList.add("active");
+
+            if(entry.target.innerText.includes("Clocks")){
+                playClocks();
+            }
+        }
+    });
+},{threshold:0.6});
+
+sections.forEach(sec=>{
+    sec.classList.add("animate");
+    observer.observe(sec);
+});
+
+// 🌌 PARTICLES
+const canvas = document.getElementById("bgCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<80;i++){
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        z:Math.random()*1000
+    });
+}
+
+function animate(){
+    ctx.fillStyle="black";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="#00d4ff";
+
+    particles.forEach(p=>{
+        p.z-=2;
+        if(p.z<=0) p.z=1000;
+
+        let k=200/p.z;
+        let x=(p.x-canvas.width/2)*k+canvas.width/2;
+        let y=(p.y-canvas.height/2)*k+canvas.height/2;
+
+        ctx.fillRect(x,y,2,2);
+    });
+
+    requestAnimationFrame(animate);
+}
+animate();
+
+window.addEventListener("resize", ()=>{
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+});
+</script>
 
 </body>
 </html>
