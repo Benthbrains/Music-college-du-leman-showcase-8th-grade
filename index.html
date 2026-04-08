@@ -5,110 +5,117 @@
 <title>Technology showcase Music by: Benjamin and Kfir</title>
 
 <style>
+:root {
+    --accent: #00d4ff; /* this is like our main glow color (it looks cool so yeah) */
+}
+
+/* basic page stuff */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     background: #000;
     color: #fff;
-    overflow-x: hidden;
+    overflow-x: hidden; /* stops weird side scrolling (super annoying otherwise) */
 }
 
-/* Sections */
+/* every slide section */
 section {
-    height: 100vh;
+    height: 100vh; /* full screen cuz it looks more cinematic */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; /* center everything cuz lazy but also looks good */
     align-items: center;
     text-align: center;
     padding: 40px;
     position: relative;
+
+    /* start invisible for animation */
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
 }
 
-/* Text */
+/* when it shows up */
+section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* title styling */
 h1 {
     font-size: 4rem;
     margin: 0;
     transition: 0.3s;
 }
 
+/* hover effect cuz why not */
 h1:hover {
-    color: #00d4ff;
+    color: var(--accent);
     transform: scale(1.05);
 }
 
+/* subtitles */
 h2 {
     font-size: 2rem;
     color: #aaa;
 }
 
+/* paragraph stuff */
 p {
     max-width: 700px;
     font-size: 1.2rem;
     line-height: 1.6;
 }
 
-/* Highlight */
+/* glowing text thing */
 .highlight {
-    color: #00d4ff;
-    text-shadow: 0 0 10px #00d4ff;
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--accent); /* glow go brrrr */
 }
 
-/* Fade animation */
-.fade {
-    opacity: 0;
-    transform: translateY(40px);
-    animation: fadeIn 1.5s forwards;
-}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Background styles */
+/* backgrounds (just vibes honestly) */
 .dark { background: #000; }
 .blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
 .purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
 
-/* Image styling */
+/* images */
 .image {
     width: 60%;
     max-width: 700px;
     margin-top: 20px;
     border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,212,255,0.3);
-    transition: 0.4s;
+    box-shadow: 0 0 30px rgba(0,212,255,0.25);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
+/* hover zoom cuz it looks fancy */
 .image:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 50px rgba(0,212,255,0.8);
+    box-shadow: 0 0 60px rgba(0,212,255,0.8);
 }
 
-/* Video styling */
+/* video styling (same vibe as images) */
 video {
     border-radius: 12px;
     box-shadow: 0 0 40px rgba(0,212,255,0.5);
     margin-top: 20px;
 }
 
-/* Floating music notes effect */
+/* floating music notes (they just vibe in the background lol) */
 .note {
     position: absolute;
     font-size: 2rem;
-    animation: float 6s infinite linear;
-    opacity: 0.2;
+    animation: float 6s linear infinite;
+    opacity: 0.15;
 }
 
+/* they go up forever basically */
 @keyframes float {
     from { transform: translateY(100vh); }
     to { transform: translateY(-10vh); }
 }
 
-/* 🎹 Piano UI */
+/* piano stuff (we barely use it but its cool ok) */
 .piano {
     display: flex;
     margin-top: 30px;
@@ -119,14 +126,16 @@ video {
     height: 160px;
     background: white;
     border: 1px solid black;
-    transition: 0.1s;
+    transition: all 0.1s ease;
 }
 
+/* when you press a key */
 .key.active {
-    background: #00d4ff;
-    box-shadow: 0 0 20px #00d4ff;
+    background: var(--accent);
+    box-shadow: 0 0 20px var(--accent);
 }
 
+/* black keys */
 .black {
     width: 25px;
     height: 100px;
@@ -137,7 +146,7 @@ video {
     position: relative;
 }
 
-/* 🌌 Canvas */
+/* background canvas (for the cool particles) */
 #bgCanvas {
     position: fixed;
     top: 0;
@@ -149,127 +158,69 @@ video {
 
 <body>
 
-<!-- Floating Notes -->
+<!-- random floating notes cuz aesthetic -->
 <div class="note" style="left:10%">🎵</div>
 <div class="note" style="left:30%; animation-delay:2s;">🎶</div>
 <div class="note" style="left:70%; animation-delay:4s;">🎵</div>
 
 <canvas id="bgCanvas"></canvas>
 
-<!-- Slide 1 -->
-<section class="dark fade">
-    <h1>🎮 Interactive Buzzer Simulation</h1>
-    <h2>By Benjamin & Kfir</h2>
-</section>
-
-<!-- Slide 2 -->
-<section class="blue fade">
-    <h1>It started with a question.</h1>
-    <p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p>
-</section>
-
-<!-- Slide 3 (image added) -->
-<section class="dark fade">
-    <h1>So we tried.</h1>
-    <p>We took 4 buzzers. Connected them to an Arduino.</p>
-    <img class="image" src="arduino.jpg" alt="Arduino setup">
-</section>
-
-<!-- Slide 4 -->
-<section class="purple fade">
-    <h1>Then… it worked.</h1>
-    <p>Our first full song:</p>
-    <h2>“Clocks” – Coldplay</h2>
-</section>
-
-<!-- 🎥 VIDEO (Clocks MP4) -->
-<section class="dark fade">
-    <h1>Watch the Process</h1>
-    <video width="70%" height="350" controls>
-        <source src="clocks.mp4" type="video/mp4">
-    </video>
-</section>
-
-<!-- Slide 5 -->
-<section class="blue fade">
-    <h1>But how does it work?</h1>
-</section>
-
-<!-- Slide 6 -->
-<section class="dark fade">
-    <h1>Step 1</h1>
-    <p>We created <span class="highlight">92 variables</span> for musical notes.</p>
-    <img class="image" src="notes.jpg" alt="Music notes">
-</section>
-
-<!-- Slide 7 -->
-<section class="dark fade">
-    <h1>The Logic</h1>
-    <p>Each note = Letter + Number + Sharp/Normal</p>
-</section>
-
-<!-- Slide 8 -->
-<section class="purple fade">
-    <h1>Step 2</h1>
-    <p>Arduino sends signals ▶ ⏸ ⏹</p>
-    <img class="image" src="soundwave.jpg" alt="Sound wave">
-</section>
-
-<!-- Slide 9 -->
-<section class="dark fade">
-    <h1>Step 3</h1>
-    <p>Buzzers combine to recreate real music 🎶</p>
-</section>
-
-<!-- Slide 10 -->
-<section class="blue fade">
-    <h1>What’s next?</h1>
-</section>
-
-<!-- Slide 11 -->
-<section class="purple fade">
-    <h1>New Song</h1>
-    <h2>“No Longer You”-Jorge rivera herran</h2>
-</section>
-<!-- Final Slide -->
-<section class="blue fade">
-    <h1>Thank You.</h1>
-    <p>Any questions?</p>
-</section>
+<!-- slides (same content cuz teacher said dont change stuff probably) -->
+<section class="dark"><h1>🎮 Interactive Buzzer Simulation</h1><h2>By Benjamin & Kfir</h2></section>
+<section class="blue"><h1>It started with a question.</h1><p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p></section>
+<section class="dark"><h1>So we tried.</h1><p>We took 4 buzzers. Connected them to an Arduino.</p><img class="image" src="arduino.jpg"></section>
+<section class="purple"><h1>Then… it worked.</h1><p>Our first full song:</p><h2>“Clocks” – Coldplay</h2></section>
+<section class="dark"><h1>Watch the Process</h1><video width="70%" height="350" controls><source src="clocks.mp4"></video></section>
+<section class="blue"><h1>But how does it work?</h1></section>
+<section class="dark"><h1>Step 1</h1><p>We created <span class="highlight">92 variables</span> for musical notes.</p><img class="image" src="notes.jpg"></section>
+<section class="dark"><h1>The Logic</h1><p>Each note = Letter + Number + Sharp/Normal</p></section>
+<section class="purple"><h1>Step 2</h1><p>Arduino sends signals ▶ ⏸ ⏹</p><img class="image" src="soundwave.jpg"></section>
+<section class="dark"><h1>Step 3</h1><p>Buzzers combine to recreate real music 🎶</p></section>
+<section class="blue"><h1>What’s next?</h1></section>
+<section class="purple"><h1>New Song</h1><h2>“No Longer You”-Jorge rivera herran</h2></section>
+<section class="blue"><h1>Thank You.</h1><p>Any questions?</p></section>
 
 <script>
-// 🎧 Audio Setup
+// audio setup (this is like the brain for sound stuff)
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let analyser = audioCtx.createAnalyser();
+const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 256; // idk bigger = more detail but this is fine
 
-// 🎵 Play Note with layered wave + highlight
+// master volume so we dont destroy ears
+const masterGain = audioCtx.createGain();
+masterGain.gain.value = 0.3;
+
+masterGain.connect(analyser);
+analyser.connect(audioCtx.destination);
+
+// this plays a note (aka makes sound happen)
 function playNote(freq, duration = 0.5) {
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
+    const osc1 = audioCtx.createOscillator(); // main sound
+    const osc2 = audioCtx.createOscillator(); // slightly detuned so it sounds cooler
     const gain = audioCtx.createGain();
 
-    osc1.type = "sawtooth";
-    osc2.type = "triangle";
+    osc1.type = "sawtooth"; // sounds kinda edgy
+    osc2.type = "triangle"; // softer
 
     osc1.frequency.value = freq;
-    osc2.frequency.value = freq * 1.01;
+    osc2.frequency.value = freq * 1.01; // tiny difference = big vibe
 
     osc1.connect(gain);
     osc2.connect(gain);
+    gain.connect(masterGain);
 
-    gain.connect(analyser);
-    analyser.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
 
-    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    // fade out so it doesnt click (clicks are evil)
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-    osc1.start();
-    osc2.start();
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + duration);
+    osc2.stop(now + duration);
 
-    osc1.stop(audioCtx.currentTime + duration);
-    osc2.stop(audioCtx.currentTime + duration);
-
-    // 🌈 highlight key
+    // highlight piano keys if they exist
     document.querySelectorAll(".key").forEach(k => {
         if (Math.abs(k.dataset.note - freq) < 1) {
             k.classList.add("active");
@@ -278,69 +229,70 @@ function playNote(freq, duration = 0.5) {
     });
 }
 
-// 🎼 Clocks Melody
+// this plays the clocks melody (we felt like musicians fr)
 function playClocks() {
-    const melody = [
-        329.63,392,440,392,
-        329.63,392,440,392,
-        293.66,349.23,392,349.23,
-        261.63,329.63,392
-    ];
-
-    const tempo = 180;
-    const interval = 60000 / tempo;
+    const melody = [329.63,392,440,392,329.63,392,440,392,293.66,349.23,392,349.23,261.63,329.63,392];
+    const interval = 60000 / 180; // tempo math (idk it works)
 
     melody.forEach((note, i) => {
         setTimeout(() => playNote(note), i * interval);
     });
 }
 
-// Click piano
-document.querySelectorAll(".key").forEach(key => {
-    key.addEventListener("click", () => {
-        playNote(parseFloat(key.dataset.note));
-    });
-});
-
-// 🌌 Audio-reactive particles
+// canvas setup (for cool floating particles)
 const canvas = document.getElementById("bgCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// resize so it fits screen
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
 
-let particles = Array.from({length: 80}, () => ({
+// make a bunch of tiny particles
+let particles = Array.from({length: 60}, () => ({
     x: Math.random()*canvas.width,
     y: Math.random()*canvas.height,
     size: Math.random()*2
 }));
 
+// animation loop (runs forever basically)
 function animate() {
     requestAnimationFrame(animate);
 
-    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    // trail effect (looks like motion blur kinda)
+    ctx.fillStyle = "rgba(0,0,0,0.15)";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    let data = new Uint8Array(analyser.frequencyBinCount);
+    // get audio data
+    const data = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(data);
 
-    let avg = data.reduce((a,b)=>a+b,0)/data.length;
+    const avg = data.reduce((a,b)=>a+b,0)/data.length;
 
     particles.forEach(p => {
-        p.y -= (avg/50);
+        p.y -= avg / 60; // move based on sound (this is the cool part)
         if (p.y < 0) p.y = canvas.height;
 
         ctx.fillStyle = "#00d4ff";
-        ctx.fillRect(p.x, p.y, p.size + avg/50, p.size + avg/50);
+        ctx.fillRect(p.x, p.y, p.size + avg/60, p.size + avg/60);
     });
 }
-
 animate();
 
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
+// scroll animation (makes slides fade in instead of just appearing like boring)
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add("visible");
+    });
+}, { threshold: 0.2 });
+
+document.querySelectorAll("section").forEach(sec => observer.observe(sec));
+
+// resize fix (important or it breaks and looks bad)
+window.addEventListener("resize", resizeCanvas);
+
 </script>
 
 </body>
