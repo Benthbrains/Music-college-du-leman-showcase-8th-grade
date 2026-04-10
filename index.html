@@ -13,7 +13,7 @@ body {
     overflow: hidden;
 }
 
-/* 🌐 HOLOGRAM GRID BACKGROUND */
+/* 🌐 HOLOGRAM GRID */
 body::before {
     content: "";
     position: fixed;
@@ -23,7 +23,6 @@ body::before {
         linear-gradient(rgba(0,212,255,0.08) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,212,255,0.08) 1px, transparent 1px);
     background-size: 60px 60px;
-    transform: rotate(0deg);
     animation: gridMove 20s linear infinite;
     z-index: 0;
 }
@@ -63,9 +62,19 @@ h1 {
 }
 
 p {
-    max-width: 850px;
+    max-width: 900px;
     line-height: 1.7;
     color: #d6d6d6;
+    font-size: 1.05rem;
+}
+
+/* IMAGE + VIDEO */
+img, video {
+    width: 60%;
+    max-width: 700px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 35px rgba(0,212,255,0.35);
 }
 
 /* BUTTON */
@@ -107,7 +116,7 @@ button {
     100% { filter: brightness(1); }
 }
 
-/* ⌨ TYPING EFFECT */
+/* ⌨ TYPING */
 #typeText {
     border-right: 2px solid #00d4ff;
     white-space: nowrap;
@@ -123,30 +132,95 @@ button {
     <div id="progressBar"></div>
 </div>
 
-<!-- SLIDES -->
+<!-- INTRO -->
 <div class="slide active">
     <h1 id="typeText"></h1>
     <button onclick="startShow()">Start Presentation</button>
 </div>
 
-<div class="slide"><h1>ESP32 Music System</h1><p>We convert electrical signals into real music using buzzers.</p></div>
-
-<div class="slide"><h1>Idea</h1><p>Turning simple hardware into musical output.</p></div>
-
-<div class="slide"><h1>ESP32 Upgrade</h1><p>Faster timing and stable audio generation.</p></div>
-
-<div class="slide"><h1>How It Works</h1><p>Notes → Frequencies → Buzzers</p></div>
-
+<!-- PROJECT INTRO -->
 <div class="slide">
-    <h1>Demo Video</h1>
+    <h1>School Technology Project</h1>
+    <p>
+        This presentation is for our school showcase for parents, not investors.
+        We demonstrate how technology can recreate music using an ESP32 system.
+    </p>
+</div>
+
+<!-- SONG 1 -->
+<div class="slide">
+    <h1>Song 1: Clocks - Coldplay</h1>
+    <p>
+        We first recreate the song <b>“Clocks” by Coldplay</b> using programmed frequencies
+        and ESP32-controlled buzzers.
+    </p>
+</div>
+
+<!-- ESP32 EXPLANATION + IMAGE -->
+<div class="slide">
+    <h1>Why ESP32?</h1>
+    <p>
+        We switched from Arduino to ESP32 because it gives better timing precision and stability,
+        which is critical for music synchronization.
+        <br><br>
+        The ESP32 acts as the “brain” of the system, sending exact timed signals to recreate notes.
+    </p>
+
+    <img src="esp32.jpg">
+
+    <p>
+        📌 The ESP32 board above controls all timing, frequency output, and synchronization
+        between the buzzers that generate the sound.
+    </p>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="slide">
+    <h1>How It Works</h1>
+    <p>
+        Each musical note is converted into a frequency (Hz).
+        The ESP32 plays these frequencies in sequence to form a song.
+    </p>
+</div>
+
+<!-- VIDEO -->
+<div class="slide">
+    <h1>Live Demonstration</h1>
+    <p>This is our real system running in action.</p>
+
     <video id="vid" muted>
         <source src="d.mp4" type="video/mp4">
     </video>
 </div>
 
-<div class="slide"><h1>What’s Next</h1><p>AI + Music + Sensors integration</p></div>
+<!-- SONG 2 -->
+<div class="slide">
+    <h1>Song 2: “No Longer You”</h1>
+    <p>
+        After “Clocks”, we present a second piece:
+        <b>“No Longer You” by Jorge Rivera-Herrans</b>.
+        <br><br>
+        This shows that our system can adapt to different musical styles and tempos.
+    </p>
+</div>
 
-<div class="slide"><h1>Thank You</h1></div>
+<!-- WHAT'S NEXT (TIMED IDEA) -->
+<div class="slide">
+    <h1>What’s Next</h1>
+    <p>
+        The final direction of this project includes:
+        <br><br>
+        • Perfect synchronization between music and visuals  
+        • More complex songs with multiple layers  
+        • Adding LEDs or visual effects reacting to music  
+    </p>
+</div>
+
+<!-- END -->
+<div class="slide">
+    <h1>Thank You</h1>
+    <p>Any questions?</p>
+</div>
 
 <script>
 
@@ -154,7 +228,7 @@ let slides = document.querySelectorAll(".slide");
 let index = 0;
 let audioCtx;
 
-/* 📊 PROGRESS */
+/* PROGRESS */
 function updateProgress() {
     let percent = (index / (slides.length - 1)) * 100;
     document.getElementById("progressBar").style.width = percent + "%";
@@ -171,66 +245,49 @@ function showSlide(i) {
 
     updateProgress();
 
-    /* 🎬 VIDEO AUTO PLAY */
+    /* VIDEO AUTOPLAY */
     let vid = slides[i].querySelector("video");
     if (vid) {
         vid.currentTime = 0;
         vid.play().catch(()=>{});
     }
 
-    /* 💡 FLASH EFFECT */
+    /* FLASH EFFECT */
     document.body.classList.remove("flash");
     void document.body.offsetWidth;
     document.body.classList.add("flash");
 }
 
-/* 🎮 CONTROLS */
+/* CONTROLS */
 document.addEventListener("click", () => showSlide(index + 1));
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") showSlide(index + 1);
     if (e.key === "ArrowLeft") showSlide(index - 1);
 });
 
-/* 🖥 FULLSCREEN ATTEMPT */
+/* FULLSCREEN */
 function goFull() {
     let el = document.documentElement;
     if (el.requestFullscreen) el.requestFullscreen();
 }
 
-/* ⌨ AI TYPING EFFECT */
-let text = "Initializing ESP32 Music System...";
+/* TYPING INTRO */
+let text = "Initializing ESP32 Music Presentation...";
 let i = 0;
 
 function type() {
     if (i < text.length) {
         document.getElementById("typeText").innerHTML += text[i];
         i++;
-        setTimeout(type, 60);
+        setTimeout(type, 50);
     }
 }
 
-/* 🚀 START */
+/* START */
 function startShow() {
     goFull();
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
     showSlide(1);
-
     type();
-
-    const timeline = [
-        {t: 0, slide: 1},
-        {t: 5000, slide: 2},
-        {t: 10000, slide: 3},
-        {t: 15000, slide: 4},
-        {t: 20000, slide: 5},
-        {t: 26000, slide: 6},
-        {t: 32000, slide: 7}
-    ];
-
-    timeline.forEach(item => {
-        setTimeout(() => showSlide(item.slide), item.t);
-    });
 }
 
 updateProgress();
