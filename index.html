@@ -2,76 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>ESP32 Music Project | Benjamin & Kfir</title>
+<title>ESP32 Music Project</title>
 
 <style>
-:root {
-    --accent: #00d4ff;
-}
-
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: Arial;
     background: black;
     color: white;
-    overflow: hidden; /* no scroll now (presentation mode) */
+    overflow: hidden;
 }
 
-/* SLIDES */
 .slide {
     position: absolute;
     width: 100%;
     height: 100vh;
-    display: flex;
-    flex-direction: column;
+    display: none;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     text-align: center;
-    padding: 40px;
-    opacity: 0;
-    transition: opacity 1s ease;
 }
 
 .slide.active {
-    opacity: 1;
+    display: flex;
 }
 
-h1 {
-    font-size: 3.5rem;
-}
-
-h2 {
-    color: #aaa;
-}
-
-p {
-    max-width: 700px;
-    line-height: 1.6;
-}
-
-/* backgrounds */
-.dark { background: black; }
-.blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
-.purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
-
-/* media */
-img, video {
-    width: 60%;
-    max-width: 700px;
-    margin-top: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,212,255,0.4);
-}
-
-/* button */
 button {
-    margin-top: 20px;
-    padding: 12px 20px;
-    background: var(--accent);
+    padding: 15px 25px;
+    font-size: 18px;
+    background: cyan;
     border: none;
-    border-radius: 8px;
-    color: black;
-    font-weight: bold;
     cursor: pointer;
 }
 </style>
@@ -79,174 +40,59 @@ button {
 
 <body>
 
-<!-- SLIDES -->
-
-<div class="slide active dark">
-    <h1>🎵 ESP32 Music System</h1>
-    <h2>Benjamin & Kfir</h2>
-    <p>This project explores how microcontrollers can recreate real music using buzzers.</p>
+<div class="slide active">
+    <h1>ESP32 Music Project</h1>
     <button onclick="startShow()">Start Presentation</button>
 </div>
 
-<div class="slide blue">
-    <h1>The Idea</h1>
-    <p>
-        We wanted to go beyond simple buzzers.  
-        Instead of just making noise, we asked:  
-        <br><br>
-        <strong>Can an ESP32 recreate real songs?</strong>
-    </p>
-</div>
-
-<div class="slide dark">
-    <h1>Hardware Upgrade</h1>
-    <p>
-        We switched from Arduino to <strong>ESP32</strong> for:
-    </p>
-    <p>
-        • Faster processing  
-        • Better timing precision  
-        • More flexibility for future features
-    </p>
-    <img src="esp32.jpg">
-</div>
-
-<div class="slide purple">
-    <h1>How It Works</h1>
-    <p>
-        Each musical note is converted into a frequency.  
-        The ESP32 sends signals to buzzers to reproduce those frequencies.
-    </p>
-</div>
-
-<div class="slide dark">
-    <h1>Code Complexity</h1>
-    <p>
-        Instead of simple tones, we created a structured system:
-    </p>
-    <p>
-        • Notes mapped to frequencies  
-        • Timing controlled precisely  
-        • Multiple buzzers synchronized
-    </p>
-</div>
-
-<!-- MEDIA PAGE -->
-<div class="slide blue">
-    <h1>Project Build</h1>
-    <p>Here is the physical setup of our system:</p>
-    <img src="arduino.jpg">
-</div>
-
-<div class="slide dark">
-    <h1>Testing the Song</h1>
-    <p>We recreated "Clocks" by Coldplay using buzzers.</p>
-    <video controls>
-        <source src="clocks.mp4">
-    </video>
-</div>
-
-<div class="slide purple">
-    <h1>Synchronization</h1>
-    <p>
-        Timing is critical.  
-        Every note must play at the exact moment  
-        or the song sounds wrong.
-    </p>
-</div>
-
-<div class="slide dark">
-    <h1>Live Playback</h1>
-    <p>The system plays the melody in real time:</p>
-    <button onclick="playClocks()">Play Music</button>
-</div>
-
-<div class="slide blue">
-    <h1>What's Next</h1>
-    <p>
-        • More complex songs  
-        • Better sound quality  
-        • Visual synchronization with music  
-    </p>
-</div>
-
-<div class="slide purple">
-    <h1>Thank You</h1>
-    <p>Any questions?</p>
-</div>
+<div class="slide"><h1>The Idea</h1><p>We wanted to make real music with buzzers.</p></div>
+<div class="slide"><h1>ESP32</h1><p>Better timing and performance than Arduino.</p></div>
+<div class="slide"><h1>How it Works</h1><p>Each note = frequency sent to buzzer.</p></div>
+<div class="slide"><h1>Playback</h1><p>Listen to the melody.</p></div>
+<div class="slide"><h1>What's Next</h1><p>More songs and better sound.</p></div>
+<div class="slide"><h1>Thank You</h1></div>
 
 <script>
-/* SLIDE TIMELINE SYSTEM (THIS FIXES YOUR TIMING ISSUE) */
-
 let slides = document.querySelectorAll(".slide");
-let current = 0;
+let audioCtx;
 
-function showSlide(index) {
+/* SHOW SLIDE */
+function showSlide(i) {
     slides.forEach(s => s.classList.remove("active"));
-    slides[index].classList.add("active");
+    slides[i].classList.add("active");
 }
 
-/* THIS CONTROLS THE FULL PRESENTATION TIMING */
+/* START */
 function startShow() {
-    let timings = [
-        0,     // intro
-        4000,  // idea
-        8000,  // esp32
-        12000, // how it works
-        16000,
-        20000,
-        24000,
-        28000,
-        32000,
-        36000,
-        40000
-    ];
+    console.log("CLICK WORKED"); // 👈 important test
 
-    timings.forEach((time, i) => {
-        setTimeout(() => showSlide(i), time);
+    // create audio AFTER click
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    showSlide(1); // immediate change (so you SEE it works)
+
+    let times = [3000, 6000, 9000, 12000, 15000];
+
+    times.forEach((t, i) => {
+        setTimeout(() => showSlide(i + 2), t);
     });
 
-    /* start music exactly at the right moment */
-    setTimeout(() => {
-        playClocks();
-    }, 28000); // perfectly synced with slide
+    // play sound
+    setTimeout(playSound, 9000);
 }
 
-/* AUDIO SYSTEM */
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playNote(freq, duration = 0.4) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = "sine";
-    osc.frequency.value = freq;
+/* SOUND */
+function playSound() {
+    let osc = audioCtx.createOscillator();
+    let gain = audioCtx.createGain();
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
-    const now = audioCtx.currentTime;
+    osc.frequency.value = 440;
 
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-    osc.start(now);
-    osc.stop(now + duration);
-}
-
-function playClocks() {
-    const melody = [
-        329.63,392,440,392,
-        329.63,392,440,392,
-        293.66,349.23,392,349.23,
-        261.63,329.63,392
-    ];
-
-    const interval = 300;
-
-    melody.forEach((note, i) => {
-        setTimeout(() => playNote(note), i * interval);
-    });
+    osc.start();
+    osc.stop(audioCtx.currentTime + 1);
 }
 </script>
 
