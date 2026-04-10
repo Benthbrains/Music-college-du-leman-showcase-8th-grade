@@ -2,297 +2,252 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Technology showcase Music by: Benjamin and Kfir</title>
+<title>ESP32 Music Project | Benjamin & Kfir</title>
 
 <style>
 :root {
-    --accent: #00d4ff; /* this is like our main glow color (it looks cool so yeah) */
+    --accent: #00d4ff;
 }
 
-/* basic page stuff */
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #000;
-    color: #fff;
-    overflow-x: hidden; /* stops weird side scrolling (super annoying otherwise) */
+    background: black;
+    color: white;
+    overflow: hidden; /* no scroll now (presentation mode) */
 }
 
-/* every slide section */
-section {
-    height: 100vh; /* full screen cuz it looks more cinematic */
+/* SLIDES */
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* center everything cuz lazy but also looks good */
+    justify-content: center;
     align-items: center;
     text-align: center;
     padding: 40px;
-    position: relative;
-
-    /* start invisible for animation */
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s ease, transform 1s ease;
+    transition: opacity 1s ease;
 }
 
-/* when it shows up */
-section.visible {
+.slide.active {
     opacity: 1;
-    transform: translateY(0);
 }
 
-/* title styling */
 h1 {
-    font-size: 4rem;
-    margin: 0;
-    transition: 0.3s;
+    font-size: 3.5rem;
 }
 
-/* hover effect cuz why not */
-h1:hover {
-    color: var(--accent);
-    transform: scale(1.05);
-}
-
-/* subtitles */
 h2 {
-    font-size: 2rem;
     color: #aaa;
 }
 
-/* paragraph stuff */
 p {
     max-width: 700px;
-    font-size: 1.2rem;
     line-height: 1.6;
 }
 
-/* glowing text thing */
-.highlight {
-    color: var(--accent);
-    text-shadow: 0 0 12px var(--accent); /* glow go brrrr */
-}
-
-/* backgrounds (just vibes honestly) */
-.dark { background: #000; }
+/* backgrounds */
+.dark { background: black; }
 .blue { background: linear-gradient(135deg, #001f3f, #0074D9); }
 .purple { background: linear-gradient(135deg, #2c003e, #8e44ad); }
 
-/* images */
-.image {
+/* media */
+img, video {
     width: 60%;
     max-width: 700px;
     margin-top: 20px;
     border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,212,255,0.25);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 0 30px rgba(0,212,255,0.4);
 }
 
-/* hover zoom cuz it looks fancy */
-.image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 60px rgba(0,212,255,0.8);
-}
-
-/* video styling (same vibe as images) */
-video {
-    border-radius: 12px;
-    box-shadow: 0 0 40px rgba(0,212,255,0.5);
+/* button */
+button {
     margin-top: 20px;
-}
-
-/* floating music notes (they just vibe in the background lol) */
-.note {
-    position: absolute;
-    font-size: 2rem;
-    animation: float 6s linear infinite;
-    opacity: 0.15;
-}
-
-/* they go up forever basically */
-@keyframes float {
-    from { transform: translateY(100vh); }
-    to { transform: translateY(-10vh); }
-}
-
-/* piano stuff (we barely use it but its cool ok) */
-.piano {
-    display: flex;
-    margin-top: 30px;
-}
-
-.key {
-    width: 40px;
-    height: 160px;
-    background: white;
-    border: 1px solid black;
-    transition: all 0.1s ease;
-}
-
-/* when you press a key */
-.key.active {
+    padding: 12px 20px;
     background: var(--accent);
-    box-shadow: 0 0 20px var(--accent);
-}
-
-/* black keys */
-.black {
-    width: 25px;
-    height: 100px;
-    background: black;
-    margin-left: -12px;
-    margin-right: -12px;
-    z-index: 2;
-    position: relative;
-}
-
-/* background canvas (for the cool particles) */
-#bgCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    border: none;
+    border-radius: 8px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- random floating notes cuz aesthetic -->
-<div class="note" style="left:10%">🎵</div>
-<div class="note" style="left:30%; animation-delay:2s;">🎶</div>
-<div class="note" style="left:70%; animation-delay:4s;">🎵</div>
+<!-- SLIDES -->
 
-<canvas id="bgCanvas"></canvas>
+<div class="slide active dark">
+    <h1>🎵 ESP32 Music System</h1>
+    <h2>Benjamin & Kfir</h2>
+    <p>This project explores how microcontrollers can recreate real music using buzzers.</p>
+    <button onclick="startShow()">Start Presentation</button>
+</div>
 
-<!-- slides (same content cuz teacher said dont change stuff probably) -->
-<section class="dark"><h1>🎮 Interactive Buzzer Simulation</h1><h2>By Benjamin & Kfir</h2></section>
-<section class="blue"><h1>It started with a question.</h1><p>Can we turn simple buzzers into something… <span class="highlight">musical?</span></p></section>
-<section class="dark"><h1>So we tried.</h1><p>We took 4 buzzers. Connected them to an Arduino.</p><img class="image" src="arduino.jpg"></section>
-<section class="purple"><h1>Then… it worked.</h1><p>Our first full song:</p><h2>“Clocks” – Coldplay</h2></section>
-<section class="dark"><h1>Watch the Process</h1><video width="70%" height="350" controls><source src="clocks.mp4"></video></section>
-<section class="blue"><h1>But how does it work?</h1></section>
-<section class="dark"><h1>Step 1</h1><p>We created <span class="highlight">92 variables</span> for musical notes.</p><img class="image" src="notes.jpg"></section>
-<section class="dark"><h1>The Logic</h1><p>Each note = Letter + Number + Sharp/Normal</p></section>
-<section class="purple"><h1>Step 2</h1><p>Arduino sends signals ▶ ⏸ ⏹</p><img class="image" src="soundwave.jpg"></section>
-<section class="dark"><h1>Step 3</h1><p>Buzzers combine to recreate real music 🎶</p></section>
-<section class="blue"><h1>What’s next?</h1></section>
-<section class="purple"><h1>New Song</h1><h2>“No Longer You”-Jorge rivera herran</h2></section>
-<section class="blue"><h1>Thank You.</h1><p>Any questions?</p></section>
+<div class="slide blue">
+    <h1>The Idea</h1>
+    <p>
+        We wanted to go beyond simple buzzers.  
+        Instead of just making noise, we asked:  
+        <br><br>
+        <strong>Can an ESP32 recreate real songs?</strong>
+    </p>
+</div>
+
+<div class="slide dark">
+    <h1>Hardware Upgrade</h1>
+    <p>
+        We switched from Arduino to <strong>ESP32</strong> for:
+    </p>
+    <p>
+        • Faster processing  
+        • Better timing precision  
+        • More flexibility for future features
+    </p>
+    <img src="esp32.jpg">
+</div>
+
+<div class="slide purple">
+    <h1>How It Works</h1>
+    <p>
+        Each musical note is converted into a frequency.  
+        The ESP32 sends signals to buzzers to reproduce those frequencies.
+    </p>
+</div>
+
+<div class="slide dark">
+    <h1>Code Complexity</h1>
+    <p>
+        Instead of simple tones, we created a structured system:
+    </p>
+    <p>
+        • Notes mapped to frequencies  
+        • Timing controlled precisely  
+        • Multiple buzzers synchronized
+    </p>
+</div>
+
+<!-- MEDIA PAGE -->
+<div class="slide blue">
+    <h1>Project Build</h1>
+    <p>Here is the physical setup of our system:</p>
+    <img src="arduino.jpg">
+</div>
+
+<div class="slide dark">
+    <h1>Testing the Song</h1>
+    <p>We recreated "Clocks" by Coldplay using buzzers.</p>
+    <video controls>
+        <source src="clocks.mp4">
+    </video>
+</div>
+
+<div class="slide purple">
+    <h1>Synchronization</h1>
+    <p>
+        Timing is critical.  
+        Every note must play at the exact moment  
+        or the song sounds wrong.
+    </p>
+</div>
+
+<div class="slide dark">
+    <h1>Live Playback</h1>
+    <p>The system plays the melody in real time:</p>
+    <button onclick="playClocks()">Play Music</button>
+</div>
+
+<div class="slide blue">
+    <h1>What's Next</h1>
+    <p>
+        • More complex songs  
+        • Better sound quality  
+        • Visual synchronization with music  
+    </p>
+</div>
+
+<div class="slide purple">
+    <h1>Thank You</h1>
+    <p>Any questions?</p>
+</div>
 
 <script>
-// audio setup (this is like the brain for sound stuff)
+/* SLIDE TIMELINE SYSTEM (THIS FIXES YOUR TIMING ISSUE) */
+
+let slides = document.querySelectorAll(".slide");
+let current = 0;
+
+function showSlide(index) {
+    slides.forEach(s => s.classList.remove("active"));
+    slides[index].classList.add("active");
+}
+
+/* THIS CONTROLS THE FULL PRESENTATION TIMING */
+function startShow() {
+    let timings = [
+        0,     // intro
+        4000,  // idea
+        8000,  // esp32
+        12000, // how it works
+        16000,
+        20000,
+        24000,
+        28000,
+        32000,
+        36000,
+        40000
+    ];
+
+    timings.forEach((time, i) => {
+        setTimeout(() => showSlide(i), time);
+    });
+
+    /* start music exactly at the right moment */
+    setTimeout(() => {
+        playClocks();
+    }, 28000); // perfectly synced with slide
+}
+
+/* AUDIO SYSTEM */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
-analyser.fftSize = 256; // idk bigger = more detail but this is fine
 
-// master volume so we dont destroy ears
-const masterGain = audioCtx.createGain();
-masterGain.gain.value = 0.3;
-
-masterGain.connect(analyser);
-analyser.connect(audioCtx.destination);
-
-// this plays a note (aka makes sound happen)
-function playNote(freq, duration = 0.5) {
-    const osc1 = audioCtx.createOscillator(); // main sound
-    const osc2 = audioCtx.createOscillator(); // slightly detuned so it sounds cooler
+function playNote(freq, duration = 0.4) {
+    const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
-    osc1.type = "sawtooth"; // sounds kinda edgy
-    osc2.type = "triangle"; // softer
+    osc.type = "sine";
+    osc.frequency.value = freq;
 
-    osc1.frequency.value = freq;
-    osc2.frequency.value = freq * 1.01; // tiny difference = big vibe
-
-    osc1.connect(gain);
-    osc2.connect(gain);
-    gain.connect(masterGain);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
 
     const now = audioCtx.currentTime;
 
-    // fade out so it doesnt click (clicks are evil)
     gain.gain.setValueAtTime(0.2, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
-    osc1.start(now);
-    osc2.start(now);
-    osc1.stop(now + duration);
-    osc2.stop(now + duration);
-
-    // highlight piano keys if they exist
-    document.querySelectorAll(".key").forEach(k => {
-        if (Math.abs(k.dataset.note - freq) < 1) {
-            k.classList.add("active");
-            setTimeout(() => k.classList.remove("active"), 200);
-        }
-    });
+    osc.start(now);
+    osc.stop(now + duration);
 }
 
-// this plays the clocks melody (we felt like musicians fr)
 function playClocks() {
-    const melody = [329.63,392,440,392,329.63,392,440,392,293.66,349.23,392,349.23,261.63,329.63,392];
-    const interval = 60000 / 180; // tempo math (idk it works)
+    const melody = [
+        329.63,392,440,392,
+        329.63,392,440,392,
+        293.66,349.23,392,349.23,
+        261.63,329.63,392
+    ];
+
+    const interval = 300;
 
     melody.forEach((note, i) => {
         setTimeout(() => playNote(note), i * interval);
     });
 }
-
-// canvas setup (for cool floating particles)
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-
-// resize so it fits screen
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-resizeCanvas();
-
-// make a bunch of tiny particles
-let particles = Array.from({length: 60}, () => ({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    size: Math.random()*2
-}));
-
-// animation loop (runs forever basically)
-function animate() {
-    requestAnimationFrame(animate);
-
-    // trail effect (looks like motion blur kinda)
-    ctx.fillStyle = "rgba(0,0,0,0.15)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-
-    // get audio data
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(data);
-
-    const avg = data.reduce((a,b)=>a+b,0)/data.length;
-
-    particles.forEach(p => {
-        p.y -= avg / 60; // move based on sound (this is the cool part)
-        if (p.y < 0) p.y = canvas.height;
-
-        ctx.fillStyle = "#00d4ff";
-        ctx.fillRect(p.x, p.y, p.size + avg/60, p.size + avg/60);
-    });
-}
-animate();
-
-// scroll animation (makes slides fade in instead of just appearing like boring)
-const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add("visible");
-    });
-}, { threshold: 0.2 });
-
-document.querySelectorAll("section").forEach(sec => observer.observe(sec));
-
-// resize fix (important or it breaks and looks bad)
-window.addEventListener("resize", resizeCanvas);
-
 </script>
 
 </body>
