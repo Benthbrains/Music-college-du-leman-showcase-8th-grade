@@ -5,10 +5,6 @@
 <title>ESP32 Music Project</title>
 
 <style>
-:root {
-    --accent: #00d4ff;
-}
-
 body {
     margin: 0;
     font-family: Arial;
@@ -17,245 +13,228 @@ body {
     overflow: hidden;
 }
 
+/* 🌐 HOLOGRAM GRID BACKGROUND */
+body::before {
+    content: "";
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background-image:
+        linear-gradient(rgba(0,212,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.08) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: rotate(0deg);
+    animation: gridMove 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes gridMove {
+    from { transform: translateY(0); }
+    to { transform: translateY(-60px); }
+}
+
 /* SLIDES */
 .slide {
     position: absolute;
     width: 100%;
     height: 100vh;
-    padding: 40px;
+    padding: 60px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
     text-align: center;
 
     opacity: 0;
-    transform: translateY(40px);
-    transition: all 1s ease;
+    transform: scale(1.05);
+    transition: all 0.8s ease;
+    z-index: 2;
 }
 
 .slide.active {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1);
 }
 
 /* TEXT */
 h1 {
     font-size: 3rem;
+    text-shadow: 0 0 20px rgba(0,212,255,0.3);
 }
 
 p {
-    max-width: 700px;
-    line-height: 1.6;
-}
-
-/* MEDIA */
-img, video {
-    width: 60%;
-    max-width: 700px;
-    margin-top: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,212,255,0.4);
+    max-width: 850px;
+    line-height: 1.7;
+    color: #d6d6d6;
 }
 
 /* BUTTON */
 button {
     padding: 15px 25px;
     font-size: 18px;
-    background: var(--accent);
+    background: #00d4ff;
     border: none;
+    border-radius: 10px;
     cursor: pointer;
-    border-radius: 8px;
+    font-weight: bold;
 }
 
-/* FADE IN FOR MEDIA */
-.fade-in {
-    opacity: 0;
-    transition: opacity 1.5s ease;
+/* 📊 PROGRESS BAR */
+#progressContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    z-index: 999;
 }
 
-.fade-in.show {
-    opacity: 1;
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: #00d4ff;
+}
+
+/* 💡 FLASH EFFECT */
+.flash {
+    animation: flashAnim 0.6s ease;
+}
+
+@keyframes flashAnim {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2); }
+    100% { filter: brightness(1); }
+}
+
+/* ⌨ TYPING EFFECT */
+#typeText {
+    border-right: 2px solid #00d4ff;
+    white-space: nowrap;
+    overflow: hidden;
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
+<!-- 📊 PROGRESS -->
+<div id="progressContainer">
+    <div id="progressBar"></div>
+</div>
+
+<!-- SLIDES -->
 <div class="slide active">
-    <h1>🎵 ESP32 Music Project</h1>
-    <p>Benjamin & Kfir</p>
+    <h1 id="typeText"></h1>
     <button onclick="startShow()">Start Presentation</button>
 </div>
 
-<!-- IDEA -->
-<div class="slide">
-    <h1>The Idea</h1>
-    <p>
-        Can simple buzzers recreate real music?  
-        We wanted to move beyond noise and build something musical.
-    </p>
-</div>
+<div class="slide"><h1>ESP32 Music System</h1><p>We convert electrical signals into real music using buzzers.</p></div>
 
-<!-- ESP32 -->
-<div class="slide">
-    <h1>Why ESP32?</h1>
-    <p>
-        We switched from Arduino to ESP32 for:
-        <br><br>
-        • Faster processing  
-        • Better timing precision  
-        • More control over sound  
-    </p>
-    <img src="esp32.jpg" class="fade-in">
-</div>
+<div class="slide"><h1>Idea</h1><p>Turning simple hardware into musical output.</p></div>
 
-<!-- HOW IT WORKS -->
-<div class="slide">
-    <h1>How It Works</h1>
-    <p>
-        Each note is a frequency.  
-        The ESP32 sends signals to buzzers to recreate those frequencies.
-    </p>
-</div>
+<div class="slide"><h1>ESP32 Upgrade</h1><p>Faster timing and stable audio generation.</p></div>
 
-<!-- SYSTEM -->
-<div class="slide">
-    <h1>System Logic</h1>
-    <p>
-        • Notes mapped to frequencies  
-        • Precise timing  
-        • Sequenced playback  
-    </p>
-</div>
+<div class="slide"><h1>How It Works</h1><p>Notes → Frequencies → Buzzers</p></div>
 
-<!-- VIDEO -->
 <div class="slide">
-    <h1>Project Demo</h1>
-    <p>Real test of the system:</p>
-    <video class="fade-in" controls>
-        <source src="clocks.mp4">
+    <h1>Demo Video</h1>
+    <video id="vid" muted>
+        <source src="d.mp4" type="video/mp4">
     </video>
 </div>
 
-<!-- PLAYBACK -->
-<div class="slide">
-    <h1>Live Playback</h1>
-    <p>The system recreates the melody in real time.</p>
-</div>
+<div class="slide"><h1>What’s Next</h1><p>AI + Music + Sensors integration</p></div>
 
-<!-- NEXT -->
-<div class="slide">
-    <h1>What's Next</h1>
-    <p>
-        • More complex songs  
-        • Better sound quality  
-        • Lights synced with music  
-    </p>
-</div>
-
-<!-- END -->
-<div class="slide">
-    <h1>Thank You</h1>
-</div>
+<div class="slide"><h1>Thank You</h1></div>
 
 <script>
+
 let slides = document.querySelectorAll(".slide");
+let index = 0;
 let audioCtx;
+
+/* 📊 PROGRESS */
+function updateProgress() {
+    let percent = (index / (slides.length - 1)) * 100;
+    document.getElementById("progressBar").style.width = percent + "%";
+}
 
 /* SHOW SLIDE */
 function showSlide(i) {
     slides.forEach(s => s.classList.remove("active"));
-    if (slides[i]) {
-        slides[i].classList.add("active");
 
-        // animate media inside slide
-        let media = slides[i].querySelectorAll(".fade-in");
-        media.forEach(el => {
-            el.classList.remove("show");
-            setTimeout(() => el.classList.add("show"), 300);
-        });
+    if (!slides[i]) return;
+
+    slides[i].classList.add("active");
+    index = i;
+
+    updateProgress();
+
+    /* 🎬 VIDEO AUTO PLAY */
+    let vid = slides[i].querySelector("video");
+    if (vid) {
+        vid.currentTime = 0;
+        vid.play().catch(()=>{});
+    }
+
+    /* 💡 FLASH EFFECT */
+    document.body.classList.remove("flash");
+    void document.body.offsetWidth;
+    document.body.classList.add("flash");
+}
+
+/* 🎮 CONTROLS */
+document.addEventListener("click", () => showSlide(index + 1));
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") showSlide(index + 1);
+    if (e.key === "ArrowLeft") showSlide(index - 1);
+});
+
+/* 🖥 FULLSCREEN ATTEMPT */
+function goFull() {
+    let el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+}
+
+/* ⌨ AI TYPING EFFECT */
+let text = "Initializing ESP32 Music System...";
+let i = 0;
+
+function type() {
+    if (i < text.length) {
+        document.getElementById("typeText").innerHTML += text[i];
+        i++;
+        setTimeout(type, 60);
     }
 }
 
-/* SAFE MEDIA LOADING */
-function safeMediaLoad() {
-    document.querySelectorAll("img, video").forEach(el => {
-        el.onerror = () => {
-            console.warn("Missing file:", el.src);
-            el.style.display = "none"; // hide broken media
-        };
-    });
-}
-
-/* START */
+/* 🚀 START */
 function startShow() {
+    goFull();
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    document.querySelector("button").style.display = "none";
 
     showSlide(1);
 
-    /* PERFECT TIMELINE (SYNCED) */
+    type();
+
     const timeline = [
-        {time: 0, slide: 1},
-        {time: 5000, slide: 2},
-        {time: 10000, slide: 3},
-        {time: 15000, slide: 4},
-        {time: 20000, slide: 5},
-        {time: 25000, slide: 6}, // video
-        {time: 30000, slide: 7}, // playback
-        {time: 30000, action: playClocks}, // music sync
-        {time: 36000, slide: 8},
-        {time: 42000, slide: 9}
+        {t: 0, slide: 1},
+        {t: 5000, slide: 2},
+        {t: 10000, slide: 3},
+        {t: 15000, slide: 4},
+        {t: 20000, slide: 5},
+        {t: 26000, slide: 6},
+        {t: 32000, slide: 7}
     ];
 
     timeline.forEach(item => {
-        setTimeout(() => {
-            if (item.slide !== undefined) showSlide(item.slide);
-            if (item.action) item.action();
-        }, item.time);
+        setTimeout(() => showSlide(item.slide), item.t);
     });
 }
 
-/* SOUND ENGINE */
-function playNote(freq, duration = 0.3) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+updateProgress();
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.frequency.value = freq;
-
-    const now = audioCtx.currentTime;
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-    osc.start(now);
-    osc.stop(now + duration);
-}
-
-/* MELODY (SYNCED) */
-function playClocks() {
-    const melody = [
-        329.63,392,440,392,
-        329.63,392,440,392,
-        293.66,349.23,392,
-        261.63,329.63
-    ];
-
-    const interval = 300;
-
-    melody.forEach((note, i) => {
-        setTimeout(() => playNote(note), i * interval);
-    });
-}
-
-/* INIT */
-safeMediaLoad();
 </script>
 
 </body>
