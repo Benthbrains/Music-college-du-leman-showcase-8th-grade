@@ -5,6 +5,10 @@
 <title>ESP32 Music Project</title>
 
 <style>
+:root {
+    --accent: #00d4ff;
+}
+
 body {
     margin: 0;
     font-family: Arial;
@@ -13,44 +17,148 @@ body {
     overflow: hidden;
 }
 
+/* SLIDES */
 .slide {
     position: absolute;
     width: 100%;
     height: 100vh;
-    display: none;
+    padding: 40px;
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     text-align: center;
+
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s ease;
 }
 
 .slide.active {
-    display: flex;
+    opacity: 1;
+    transform: translateY(0);
 }
 
+/* TEXT */
+h1 {
+    font-size: 3rem;
+}
+
+p {
+    max-width: 700px;
+    line-height: 1.6;
+}
+
+/* MEDIA */
+img, video {
+    width: 60%;
+    max-width: 700px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(0,212,255,0.4);
+}
+
+/* BUTTON */
 button {
     padding: 15px 25px;
     font-size: 18px;
-    background: cyan;
+    background: var(--accent);
     border: none;
     cursor: pointer;
+    border-radius: 8px;
+}
+
+/* FADE IN FOR MEDIA */
+.fade-in {
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.fade-in.show {
+    opacity: 1;
 }
 </style>
 </head>
 
 <body>
 
+<!-- INTRO -->
 <div class="slide active">
-    <h1>ESP32 Music Project</h1>
+    <h1>🎵 ESP32 Music Project</h1>
+    <p>Benjamin & Kfir</p>
     <button onclick="startShow()">Start Presentation</button>
 </div>
 
-<div class="slide"><h1>The Idea</h1><p>We wanted to make real music with buzzers.</p></div>
-<div class="slide"><h1>ESP32</h1><p>Better timing and performance than Arduino.</p></div>
-<div class="slide"><h1>How it Works</h1><p>Each note = frequency sent to buzzer.</p></div>
-<div class="slide"><h1>Playback</h1><p>Listen to the melody.</p></div>
-<div class="slide"><h1>What's Next</h1><p>More songs and better sound.</p></div>
-<div class="slide"><h1>Thank You</h1></div>
+<!-- IDEA -->
+<div class="slide">
+    <h1>The Idea</h1>
+    <p>
+        Can simple buzzers recreate real music?  
+        We wanted to move beyond noise and build something musical.
+    </p>
+</div>
+
+<!-- ESP32 -->
+<div class="slide">
+    <h1>Why ESP32?</h1>
+    <p>
+        We switched from Arduino to ESP32 for:
+        <br><br>
+        • Faster processing  
+        • Better timing precision  
+        • More control over sound  
+    </p>
+    <img src="esp32.jpg" class="fade-in">
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="slide">
+    <h1>How It Works</h1>
+    <p>
+        Each note is a frequency.  
+        The ESP32 sends signals to buzzers to recreate those frequencies.
+    </p>
+</div>
+
+<!-- SYSTEM -->
+<div class="slide">
+    <h1>System Logic</h1>
+    <p>
+        • Notes mapped to frequencies  
+        • Precise timing  
+        • Sequenced playback  
+    </p>
+</div>
+
+<!-- VIDEO -->
+<div class="slide">
+    <h1>Project Demo</h1>
+    <p>Real test of the system:</p>
+    <video class="fade-in" controls>
+        <source src="clocks.mp4">
+    </video>
+</div>
+
+<!-- PLAYBACK -->
+<div class="slide">
+    <h1>Live Playback</h1>
+    <p>The system recreates the melody in real time.</p>
+</div>
+
+<!-- NEXT -->
+<div class="slide">
+    <h1>What's Next</h1>
+    <p>
+        • More complex songs  
+        • Better sound quality  
+        • Lights synced with music  
+    </p>
+</div>
+
+<!-- END -->
+<div class="slide">
+    <h1>Thank You</h1>
+</div>
 
 <script>
 let slides = document.querySelectorAll(".slide");
@@ -59,41 +167,95 @@ let audioCtx;
 /* SHOW SLIDE */
 function showSlide(i) {
     slides.forEach(s => s.classList.remove("active"));
-    slides[i].classList.add("active");
+    if (slides[i]) {
+        slides[i].classList.add("active");
+
+        // animate media inside slide
+        let media = slides[i].querySelectorAll(".fade-in");
+        media.forEach(el => {
+            el.classList.remove("show");
+            setTimeout(() => el.classList.add("show"), 300);
+        });
+    }
+}
+
+/* SAFE MEDIA LOADING */
+function safeMediaLoad() {
+    document.querySelectorAll("img, video").forEach(el => {
+        el.onerror = () => {
+            console.warn("Missing file:", el.src);
+            el.style.display = "none"; // hide broken media
+        };
+    });
 }
 
 /* START */
 function startShow() {
-    console.log("CLICK WORKED"); // 👈 important test
-
-    // create audio AFTER click
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    showSlide(1); // immediate change (so you SEE it works)
+    document.querySelector("button").style.display = "none";
 
-    let times = [3000, 6000, 9000, 12000, 15000];
+    showSlide(1);
 
-    times.forEach((t, i) => {
-        setTimeout(() => showSlide(i + 2), t);
+    /* PERFECT TIMELINE (SYNCED) */
+    const timeline = [
+        {time: 0, slide: 1},
+        {time: 5000, slide: 2},
+        {time: 10000, slide: 3},
+        {time: 15000, slide: 4},
+        {time: 20000, slide: 5},
+        {time: 25000, slide: 6}, // video
+        {time: 30000, slide: 7}, // playback
+        {time: 30000, action: playClocks}, // music sync
+        {time: 36000, slide: 8},
+        {time: 42000, slide: 9}
+    ];
+
+    timeline.forEach(item => {
+        setTimeout(() => {
+            if (item.slide !== undefined) showSlide(item.slide);
+            if (item.action) item.action();
+        }, item.time);
     });
-
-    // play sound
-    setTimeout(playSound, 9000);
 }
 
-/* SOUND */
-function playSound() {
-    let osc = audioCtx.createOscillator();
-    let gain = audioCtx.createGain();
+/* SOUND ENGINE */
+function playNote(freq, duration = 0.3) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
-    osc.frequency.value = 440;
+    osc.frequency.value = freq;
 
-    osc.start();
-    osc.stop(audioCtx.currentTime + 1);
+    const now = audioCtx.currentTime;
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+    osc.start(now);
+    osc.stop(now + duration);
 }
+
+/* MELODY (SYNCED) */
+function playClocks() {
+    const melody = [
+        329.63,392,440,392,
+        329.63,392,440,392,
+        293.66,349.23,392,
+        261.63,329.63
+    ];
+
+    const interval = 300;
+
+    melody.forEach((note, i) => {
+        setTimeout(() => playNote(note), i * interval);
+    });
+}
+
+/* INIT */
+safeMediaLoad();
 </script>
 
 </body>
