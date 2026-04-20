@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random Sound Song Maker</title>
+</head>
+<body>
+  <h2>🎵 Random Sound Song Maker</h2>
+  <button onclick="startRecording()">Record Sound</button>
+  <p>Press keys 1–9 to assign sounds</p>
+  <button onclick="generateSong()">Generate Song</button>
+
+  <script>
+    let sounds = {};
+    let mediaRecorder;
+    let audioChunks = [];
+    let currentKey = 1;
+
+    async function startRecording() {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = e => {
+        audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunks);
+        const url = URL.createObjectURL(blob);
+        sounds[currentKey] = new Audio(url);
+        alert("Saved to key: " + currentKey);
+        currentKey++;
+        audioChunks = [];
+      };
+
+      mediaRecorder.start();
+      setTimeout(() => mediaRecorder.stop(), 1000); // record 1 sec
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (sounds[e.key]) {
+        sounds[e.key].currentTime = 0;
+        sounds[e.key].play();
+      }
+    });
+
+    function generateSong() {
+      let pattern = [];
+
+      // create random pattern
+      for (let i = 0; i < 20; i++) {
+        let keys = Object.keys(sounds);
+        if (keys.length === 0) return alert("Record sounds first!");
+        let randKey = keys[Math.floor(Math.random() * keys.length)];
+        pattern.push(randKey);
+      }
+
+      let i = 0;
+      let interval = setInterval(() => {
+        let key = pattern[i];
+        sounds[key].currentTime = 0;
+        sounds[key].play();
+        i++;
+        if (i >= pattern.length) clearInterval(interval);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
