@@ -1,67 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Random Sound Song Maker</title>
+  <title>Noise to Music</title>
 </head>
 <body>
-  <h2>🎵 Random Sound Song Maker</h2>
-  <button onclick="startRecording()">Record Sound</button>
-  <p>Press keys 1–9 to assign sounds</p>
-  <button onclick="generateSong()">Generate Song</button>
+  <h1>Noise → Music Generator</h1>
+  <button onclick="start()">Start Microphone</button>
 
   <script>
-    let sounds = {};
-    let mediaRecorder;
-    let audioChunks = [];
-    let currentKey = 1;
+    let audioContext;
+    let oscillator;
 
-    async function startRecording() {
+    async function start() {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
+      const source = audioContext.createMediaStreamSource(stream);
 
-      mediaRecorder.ondataavailable = e => {
-        audioChunks.push(e.data);
-      };
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
 
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(audioChunks);
-        const url = URL.createObjectURL(blob);
-        sounds[currentKey] = new Audio(url);
-        alert("Saved to key: " + currentKey);
-        currentKey++;
-        audioChunks = [];
-      };
+      source.connect(analyser);
 
-      mediaRecorder.start();
-      setTimeout(() => mediaRecorder.stop(), 1000); // record 1 sec
-    }
+      oscillator = audioContext.createOscillator();
+      oscillator.type = "sine";
+      oscillator.start();
 
-    document.addEventListener("keydown", (e) => {
-      if (sounds[e.key]) {
-        sounds[e.key].currentTime = 0;
-        sounds[e.key].play();
+      const gain = audioContext.createGain();
+      gain.gain.value = 0.2;
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function update() {
+        analyser.getByteFrequencyData(dataArray);
+
+        // Get average volume
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        let avg = sum / dataArray.length;
+
+        // Map volume to pitch
+        let frequency = 200 + avg * 5;
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+
+        requestAnimationFrame(update);
       }
-    });
 
-    function generateSong() {
-      let pattern = [];
-
-      // create random pattern
-      for (let i = 0; i < 20; i++) {
-        let keys = Object.keys(sounds);
-        if (keys.length === 0) return alert("Record sounds first!");
-        let randKey = keys[Math.floor(Math.random() * keys.length)];
-        pattern.push(randKey);
-      }
-
-      let i = 0;
-      let interval = setInterval(() => {
-        let key = pattern[i];
-        sounds[key].currentTime = 0;
-        sounds[key].play();
-        i++;
-        if (i >= pattern.length) clearInterval(interval);
-      }, 300);
+      update();
     }
   </script>
 </body>
